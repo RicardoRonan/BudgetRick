@@ -2,7 +2,9 @@ import { createClient } from '@supabase/supabase-js'
 import { localDb } from '../services/dataService.js'
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
+const SUPABASE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 
 let supabase = null
 let useLocal = true
@@ -11,17 +13,25 @@ export function isSupabaseConfigured() {
   return Boolean(SUPABASE_URL && SUPABASE_KEY)
 }
 
+function createSupabaseClient() {
+  if (!isSupabaseConfigured()) return null
+  if (!supabase) {
+    supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+  }
+  return supabase
+}
+
 export async function initSupabase() {
   if (!isSupabaseConfigured()) {
     useLocal = true
     return { mode: 'local', supabase: null }
   }
 
-  supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
-  const { data: { session } } = await supabase.auth.getSession()
+  const client = createSupabaseClient()
+  const { data: { session } } = await client.auth.getSession()
   useLocal = !session
 
-  return { mode: session ? 'supabase' : 'local', supabase }
+  return { mode: session ? 'supabase' : 'local', supabase: client }
 }
 
 export function setDataMode(local) {
@@ -116,8 +126,13 @@ function createSupabaseCollection(table) {
   }
 }
 
+export function getSupabaseClient() {
+  return createSupabaseClient()
+}
+
 export function getCollection(name) {
-  if (useLocal || !supabase) {
+  const client = getSupabaseClient()
+  if (useLocal || !client) {
     return localDb[name]
   }
   return createSupabaseCollection(name)

@@ -1,11 +1,17 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { supabase, setDataMode, isSupabaseConfigured, getCollection } from '../composables/useSupabase.js'
+import { getSupabaseClient, setDataMode, isSupabaseConfigured, getCollection } from '../composables/useSupabase.js'
 import { DEFAULT_CATEGORIES } from '../services/dataService.js'
 
 function getAuthRedirectUrl(path = '/') {
   if (typeof window === 'undefined') return undefined
   return `${window.location.origin}${path}`
+}
+
+function requireSupabase() {
+  const client = getSupabaseClient()
+  if (!client) throw new Error('Supabase is not configured')
+  return client
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -22,17 +28,18 @@ export const useAuthStore = defineStore('auth', () => {
   const lastSignInAt = computed(() => user.value?.last_sign_in_at ?? null)
 
   async function init() {
-    if (!isSupabaseConfigured() || !supabase) {
+    if (!isSupabaseConfigured()) {
       loading.value = false
       setDataMode(true)
       return
     }
 
-    const { data: { session } } = await supabase.auth.getSession()
+    const client = requireSupabase()
+    const { data: { session } } = await client.auth.getSession()
     user.value = session?.user ?? null
     setDataMode(!session)
 
-    supabase.auth.onAuthStateChange((event, session) => {
+    client.auth.onAuthStateChange((event, session) => {
       user.value = session?.user ?? null
       setDataMode(!session)
       recoveryMode.value = event === 'PASSWORD_RECOVERY'
@@ -56,9 +63,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function signUp(email, password) {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
 
-    const { data, error: authError } = await supabase.auth.signUp({
+    const { data, error: authError } = await client.auth.signUp({
       email,
       password,
       options: { emailRedirectTo: getAuthRedirectUrl('/') },
@@ -76,9 +83,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function signIn(email, password) {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
 
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error: authError } = await client.auth.signInWithPassword({ email, password })
     if (authError) throw authError
 
     user.value = data.user
@@ -89,9 +96,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function signOut() {
     error.value = null
-    if (!supabase) return
+    const client = getSupabaseClient()
+    if (!client) return
 
-    const { error: authError } = await supabase.auth.signOut()
+    const { error: authError } = await client.auth.signOut()
     if (authError) throw authError
 
     user.value = null
@@ -101,9 +109,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function updatePassword(password) {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
 
-    const { data, error: authError } = await supabase.auth.updateUser({ password })
+    const { data, error: authError } = await client.auth.updateUser({ password })
     if (authError) throw authError
 
     if (data.user) user.value = data.user
@@ -113,9 +121,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function updateEmail(email) {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
 
-    const { data, error: authError } = await supabase.auth.updateUser({
+    const { data, error: authError } = await client.auth.updateUser({
       email,
       options: { emailRedirectTo: getAuthRedirectUrl('/settings') },
     })
@@ -127,9 +135,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function resetPasswordForEmail(email) {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
 
-    const { error: authError } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error: authError } = await client.auth.resetPasswordForEmail(email, {
       redirectTo: getAuthRedirectUrl('/reset-password'),
     })
     if (authError) throw authError
@@ -137,10 +145,10 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function resendSignupConfirmation() {
     error.value = null
-    if (!supabase) throw new Error('Supabase is not configured')
+    const client = requireSupabase()
     if (!userEmail.value) throw new Error('No email on account')
 
-    const { error: authError } = await supabase.auth.resend({
+    const { error: authError } = await client.auth.resend({
       type: 'signup',
       email: userEmail.value,
       options: { emailRedirectTo: getAuthRedirectUrl('/') },
