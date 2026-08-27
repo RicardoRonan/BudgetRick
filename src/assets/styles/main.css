@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --color-primary: #5645d4;
+  --color-primary-pressed: #4534b3;
+  --color-navy: #0a1530;
+  --color-canvas: #ffffff;
+  --color-surface: #f6f5f4;
+  --color-ink: #1a1a1a;
+  --color-charcoal: #37352f;
+  --color-steel: #787671;
+  --color-hairline: #e5e3df;
+  --color-tint-peach: #ffe8d4;
+  --color-tint-rose: #fde0ec;
+  --color-tint-mint: #d9f3e1;
+  --color-tint-lavender: #e6e0f5;
+  --color-tint-sky: #dcecfa;
+  --color-tint-yellow: #fef7d6;
+  --color-success: #1aae39;
+  --color-warning: #dd5b00;
+  --color-error: #e03131;
+
+  --radius-notion-sm: 6px;
+  --radius-notion: 8px;
+  --radius-notion-lg: 12px;
+  --radius-notion-xl: 16px;
+
+  --font-sans: 'Inter', 'Notion Sans', -apple-system, system-ui, sans-serif;
+}
+
+html {
+  font-family: var(--font-sans);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+body {
+  @apply bg-surface text-ink antialiased;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.dark {
+  --color-canvas: #191919;
+  --color-surface: #232323;
+  --color-ink: #e6e6e6;
+  --color-charcoal: #d4d4d4;
+  --color-steel: #9b9b9b;
+  --color-hairline: #333333;
+  --color-navy: #0d0d0d;
+  --color-primary: #7c6cf7;
+  --color-primary-pressed: #6554e0;
+  --color-success: #3ddc56;
+  --color-warning: #f59e0b;
+  --color-error: #f87171;
+  --color-tint-peach: #3d2e1e;
+  --color-tint-rose: #3d1e2e;
+  --color-tint-mint: #1e3d26;
+  --color-tint-lavender: #2e2640;
+  --color-tint-sky: #1e2e3d;
+  --color-tint-yellow: #3d3520;
+}
+
+.nav-floating-pill {
+  @apply inline-flex items-center gap-0.5 px-1.5 py-1 rounded-full border border-hairline bg-canvas/90 backdrop-blur-md shadow-sm;
+}
+
+.dark .nav-floating-pill {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.nav-pill-btn {
+  @apply flex items-center justify-center p-2 min-h-[36px] min-w-[36px] rounded-full text-steel hover:text-charcoal hover:bg-surface/80 transition-colors;
+}
+
+.nav-pill-text-btn {
+  @apply px-3 py-1.5 min-h-[36px] text-xs sm:text-sm font-medium text-steel hover:text-charcoal rounded-full hover:bg-surface/80 transition-colors;
+}
+
+@media (max-width: 639px) {
+  .nav-floating-pill {
+    @apply px-1 py-0.5 gap-0;
+  }
+
+  .nav-pill-btn {
+    @apply p-1.5 min-h-[32px] min-w-[32px];
+  }
+}

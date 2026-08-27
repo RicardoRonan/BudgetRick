@@ -1,0 +1,39 @@
+---
+description: Writing and UI style - no emojis, no em dashes
+alwaysApply: true
+---
+
+# Writing and UI Style
+
+## No Emojis
+
+Never use emojis in code, UI, comments, docs, or responses for this project.
+
+Use icons instead:
+
+- Use `feather-icons` via the shared `FeatherIcon` component (`src/components/ui/FeatherIcon.vue`)
+- Store icon names as feather keys (e.g. `home`, `credit-card`), not unicode characters
+- Navigation and categories: render with `<FeatherIcon name="home" :size="16" />`
+
+```vue
+<!-- Bad -->
+<span>🏠 Housing</span>
+
+<!-- Good -->
+<HomeIcon class="w-4 h-4" />
+<span>Housing</span>
+```
+
+## No Em Dashes
+
+Never use em dashes (`—`, U+2014). Use commas, colons, parentheses, or separate sentences instead.
+
+```markdown
+<!-- Bad -->
+BudgetRick is local-first — no bank connections required.
+
+<!-- Good -->
+BudgetRick is local-first with no bank connections required.
+```
+
+Hyphens (`-`) and en dashes (`–`) for ranges are fine when appropriate.
