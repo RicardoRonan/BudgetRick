@@ -34,7 +34,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface flex items-center justify-center p-4">
+  <div class="min-h-dvh overflow-y-auto bg-surface flex items-center justify-center p-4 py-8">
     <NotionCard class="w-full max-w-md">
       <div class="text-center mb-6">
         <h1 class="text-2xl font-bold text-charcoal">BudgetRick</h1>

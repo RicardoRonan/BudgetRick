@@ -31,10 +31,6 @@ router.beforeEach((to) => {
     return true
   }
 
-  if (!auth.isLoggedIn) {
-    return '/login'
-  }
-
   return true
 })
 

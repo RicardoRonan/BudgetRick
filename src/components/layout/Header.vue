@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 import { useUiStore } from '../../stores/ui.js'
 import { useAuthStore } from '../../stores/auth.js'
 import MonthSelector from '../budget/MonthSelector.vue'
@@ -64,6 +64,13 @@ async function handleSignOut() {
           <FeatherIcon name="menu" :size="18" />
         </button>
         <div class="nav-floating-pill shrink-0">
+          <RouterLink
+            v-if="authStore.isConfigured && !authStore.isLoggedIn"
+            to="/login"
+            class="nav-pill-text-btn"
+          >
+            Sign in
+          </RouterLink>
           <button
             v-if="authStore.isConfigured && authStore.isLoggedIn"
             type="button"
@@ -102,6 +109,13 @@ async function handleSignOut() {
         <MonthSelector />
       </div>
       <div class="nav-floating-pill shrink-0">
+        <RouterLink
+          v-if="authStore.isConfigured && !authStore.isLoggedIn"
+          to="/login"
+          class="nav-pill-text-btn"
+        >
+          Sign in
+        </RouterLink>
         <button
           v-if="authStore.isConfigured && authStore.isLoggedIn"
           type="button"

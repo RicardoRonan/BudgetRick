@@ -5,9 +5,11 @@ import FeatherIcon from '../ui/FeatherIcon.vue'
 import { NAV_ICONS } from '../../design/icons.js'
 import { useBillReminders } from '../../composables/useBillReminders.js'
 import { useUiStore } from '../../stores/ui.js'
+import { useAuthStore } from '../../stores/auth.js'
 
 const route = useRoute()
 const uiStore = useUiStore()
+const authStore = useAuthStore()
 const { reminderCount } = useBillReminders()
 
 const navItems = [
@@ -100,6 +102,25 @@ onUnmounted(() => {
         </span>
       </RouterLink>
     </nav>
+    <div
+      v-if="authStore.isConfigured && !authStore.isLoggedIn"
+      class="p-3 border-t border-hairline shrink-0 space-y-2"
+    >
+      <RouterLink
+        to="/login"
+        class="flex items-center justify-center min-h-[44px] text-sm font-medium rounded-notion bg-primary text-white hover:bg-primary-pressed transition-colors"
+        @click="uiStore.closeSidebar()"
+      >
+        Sign in
+      </RouterLink>
+      <RouterLink
+        to="/register"
+        class="flex items-center justify-center min-h-[44px] text-sm font-medium rounded-notion text-steel hover:bg-surface hover:text-charcoal transition-colors"
+        @click="uiStore.closeSidebar()"
+      >
+        Create account
+      </RouterLink>
+    </div>
   </aside>
 
   <!-- Desktop sidebar -->

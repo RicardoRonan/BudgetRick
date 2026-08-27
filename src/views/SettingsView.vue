@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import NotionCard from '../components/ui/NotionCard.vue'
 import NotionButton from '../components/ui/NotionButton.vue'
@@ -195,6 +196,21 @@ async function syncBudgetWithRecurring() {
       <h2 class="text-sm font-semibold text-charcoal mb-4">Account</h2>
       <p class="text-sm text-steel mb-4">Manage your sign-in, email, and password.</p>
       <AccountSettings />
+    </NotionCard>
+
+    <NotionCard v-else-if="authStore.isConfigured">
+      <h2 class="text-sm font-semibold text-charcoal mb-2">Account</h2>
+      <p class="text-sm text-steel mb-4">
+        Sign in to sync your budget across devices. Your local data stays on this device until you sign in.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <RouterLink to="/login" class="w-full sm:w-auto">
+          <NotionButton class="w-full">Sign in</NotionButton>
+        </RouterLink>
+        <RouterLink to="/register" class="w-full sm:w-auto">
+          <NotionButton variant="secondary" class="w-full">Create account</NotionButton>
+        </RouterLink>
+      </div>
     </NotionCard>
 
     <NotionCard>
