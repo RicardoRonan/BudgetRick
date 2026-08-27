@@ -63,9 +63,7 @@ export const useUiStore = defineStore('ui', () => {
   }
 
   function toggleTheme() {
-    const cycle = ['light', 'dark', 'system']
-    const idx = cycle.indexOf(themePreference.value)
-    themePreference.value = cycle[(idx + 1) % cycle.length]
+    themePreference.value = resolvedTheme.value === 'dark' ? 'light' : 'dark'
   }
 
   function setThemePreference(pref) {

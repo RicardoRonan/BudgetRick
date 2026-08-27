@@ -12,15 +12,11 @@ const authStore = useAuthStore()
 const router = useRouter()
 
 const themeIcon = computed(() => {
-  if (uiStore.themePreference === 'light') return 'moon'
-  if (uiStore.themePreference === 'dark') return 'sun'
-  return 'monitor'
+  return uiStore.resolvedTheme === 'dark' ? 'sun' : 'moon'
 })
 
 const themeTitle = computed(() => {
-  if (uiStore.themePreference === 'light') return 'Switch to dark mode'
-  if (uiStore.themePreference === 'dark') return 'Switch to system theme'
-  return 'Switch to light mode'
+  return uiStore.resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
 })
 
 const sidebarToggleIcon = computed(() => {
