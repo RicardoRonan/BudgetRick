@@ -198,7 +198,7 @@ async function syncBudgetWithRecurring() {
       <AccountSettings />
     </NotionCard>
 
-    <NotionCard v-else-if="authStore.isConfigured">
+    <NotionCard v-else-if="!authStore.isLoggedIn">
       <h2 class="text-sm font-semibold text-charcoal mb-2">Account</h2>
       <p class="text-sm text-steel mb-4">
         Sign in to sync your budget across devices. Your local data stays on this device until you sign in.

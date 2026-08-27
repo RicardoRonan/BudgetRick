@@ -61,14 +61,14 @@ async function handleSignOut() {
         </button>
         <div class="nav-floating-pill shrink-0">
           <RouterLink
-            v-if="authStore.isConfigured && !authStore.isLoggedIn"
+            v-if="!authStore.isLoggedIn"
             to="/login"
             class="nav-pill-text-btn"
           >
             Sign in
           </RouterLink>
           <button
-            v-if="authStore.isConfigured && authStore.isLoggedIn"
+            v-if="authStore.isLoggedIn"
             type="button"
             class="nav-pill-btn"
             aria-label="Sign out"
@@ -106,14 +106,14 @@ async function handleSignOut() {
       </div>
       <div class="nav-floating-pill shrink-0">
         <RouterLink
-          v-if="authStore.isConfigured && !authStore.isLoggedIn"
+          v-if="!authStore.isLoggedIn"
           to="/login"
           class="nav-pill-text-btn"
         >
           Sign in
         </RouterLink>
         <button
-          v-if="authStore.isConfigured && authStore.isLoggedIn"
+          v-if="authStore.isLoggedIn"
           type="button"
           class="nav-pill-text-btn"
           @click="handleSignOut"

@@ -17,11 +17,13 @@ import { useRecurringStore } from '../stores/recurring.js'
 import { useBillReminders } from '../composables/useBillReminders.js'
 import { useCurrency } from '../composables/useCurrency.js'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth.js'
 
 const budgetStore = useBudgetStore()
 const transactionsStore = useTransactionsStore()
 const goalsStore = useGoalsStore()
 const recurringStore = useRecurringStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const { formatCurrency } = useCurrency()
 const { dashboardBills } = useBillReminders()
@@ -78,6 +80,28 @@ async function handleMarkPaid(bill) {
 
 <template>
   <div class="space-y-6 max-w-6xl">
+    <NotionCard
+      v-if="!authStore.isLoggedIn"
+      class="border-primary/30 bg-tint-lavender/40 dark:bg-tint-lavender/20"
+    >
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-sm font-semibold text-charcoal">Sign in to sync your budget</h2>
+          <p class="text-sm text-steel mt-1">
+            Cloud sync keeps your transactions, categories, and goals backed up across devices.
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2 shrink-0">
+          <NotionButton class="w-full sm:w-auto" @click="router.push('/login')">
+            Sign in
+          </NotionButton>
+          <NotionButton variant="secondary" class="w-full sm:w-auto" @click="router.push('/register')">
+            Create account
+          </NotionButton>
+        </div>
+      </div>
+    </NotionCard>
+
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div class="min-w-0">
         <h1 class="text-xl sm:text-2xl font-bold text-charcoal">Dashboard</h1>

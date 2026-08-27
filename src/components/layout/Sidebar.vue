@@ -103,7 +103,7 @@ onUnmounted(() => {
       </RouterLink>
     </nav>
     <div
-      v-if="authStore.isConfigured && !authStore.isLoggedIn"
+      v-if="!authStore.isLoggedIn"
       class="p-3 border-t border-hairline shrink-0 space-y-2"
     >
       <RouterLink
